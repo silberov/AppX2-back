@@ -12,3 +12,5 @@ router.get("/:companyId", getCompanyById);
 router.post("/", createCompany);
 router.put("/:companyId", updateCompany);
 router.delete("/:companyId", deleteCompany);
+
+module.exports = router;

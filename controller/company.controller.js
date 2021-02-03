@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const db = new PrismaClient();
+const createError = require("http-errors");
 
 const findCompanyById = async (id) => {
   const company = await db.company.findUnique({ where: { id } });
@@ -32,14 +33,12 @@ exports.getCompanyById = async (req, res, next) => {
 exports.createCompany = async (req, res, next) => {
   try {
     const { name, logo, homepage } = req.body;
-    if (findCompanyByName(name)) {
+    const alreadyExists = await findCompanyByName(name);
+    if (alreadyExists) {
       throw createError(422, "a copmany with that name already exists");
     }
     const newCompany = await db.company.create({
-      name,
-      logo,
-      homepage,
-      UpdatedAt: new Date().toISOString(),
+      data: { name, logo, homepage, UpdatedAt: new Date().toISOString() },
     });
     res.status(200).json(newCompany);
   } catch (err) {
@@ -56,10 +55,8 @@ exports.updateCompany = async (req, res, next) => {
     }
     const { name, logo, homepage } = req.body;
     const updatedCompany = await db.company.update({
-      name,
-      logo,
-      homepage,
-      UpdatedAt: new Date().toISOString(),
+      where: { id: companyId },
+      data: { name, logo, homepage, UpdatedAt: new Date().toISOString() },
     });
     res.status(200).json(updatedCompany);
   } catch (err) {
