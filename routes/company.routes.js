@@ -5,12 +5,7 @@ const {
   createCompany,
   updateCompany,
   deleteCompany,
-} = require("../controller/todolist.controller");
-//   const {
-//     createTodolistValidator,
-//     updateTodolistValidator,
-//   } = require("../validators/todolist.validators");
-//   const authMiddleware = require("../middleware/auth.middleware");
+} = require("../controller/company.controller");
 
 router.get("/", getAllCompanies);
 router.get("/:companyId", getCompanyById);
