@@ -28,23 +28,27 @@ model Company {
 }
 
 model Status {
-  id     Int    @id @default(autoincrement())
-  status String
+  id          Int           @id @default(autoincrement())
+  status      String
+  application Application[]
 }
 
 model Application {
   id            Int      @id @default(autoincrement())
   userId        Int?
   companyId     Int?
+  statusId      Int?
   position      String
   linkToPosting String
-  linkToCV      String
-  linkToLetter  String
-  notes         String
+  linkToCV      String?
+  linkToLetter  String?
+  notes         String?
   CreatedAt     DateTime @default(now())
   UpdatedAt     DateTime @updatedAt
   user          User?    @relation(fields: [userId], references: [id])
   company       Company? @relation(fields: [companyId], references: [id])
+  Status        Status?  @relation(fields: [statusId], references: [id])
+
 }
 
 generator client {

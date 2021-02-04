@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Application" ALTER COLUMN "linkToCV" DROP NOT NULL,
+ALTER COLUMN "linkToLetter" DROP NOT NULL,
+ALTER COLUMN "notes" DROP NOT NULL;
