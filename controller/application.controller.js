@@ -13,10 +13,39 @@ const createError = require("http-errors");
 
 exports.getAllApplications = async (req, res, next) => {
   try {
+    //console.log(req.body, req.userId);
     const allApplications = await db.application.findMany({
       where: { userId: req.userId },
+      include: {
+        Status: { select: { name: true } },
+        company: { select: { name: true, homepage: true, logo: true } },
+      },
     });
+    //console.log(allApplications);
     res.status(200).json(allApplications);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getApplication = async (req, res, next) => {
+  try {
+    const applicationId = Number(req.params.applicationId);
+    const application = await db.application.findUnique({
+      where: { id: applicationId },
+    });
+    if (!application.userId === req.userId) {
+      throw createError(401);
+    }
+    const oneApplication = await db.application.findUnique({
+      where: { id: applicationId },
+      include: { user: { where: { id: req.userId } } },
+      include: {
+        Status: { select: { name: true } },
+        company: { select: { name: true, homepage: true, logo: true } },
+      },
+    });
+    const company = await res.status(200).json(oneApplication);
   } catch (err) {
     next(err);
   }
@@ -47,7 +76,7 @@ exports.addApplication = async (req, res, next) => {
         notes,
         company: { connect: { id: companyId } },
         user: { connect: { id: req.userId } },
-        // status: { connect: { id: statusId } },
+        status: { connect: { id: statusId } },
       },
     });
 
@@ -68,11 +97,12 @@ exports.updateApplication = async (req, res, next) => {
       linkToLetter,
       notes,
       statusId,
+      companyId,
       companyName,
     } = req.body;
-    const company = await db.company.findUnique({
-      where: { name: companyName },
-    });
+    // const company = await db.company.findUnique({
+    //   where: { name: companyName },
+    // });
     //todo if the company is new
     const updatedApplication = await db.application.update({
       where: {
@@ -84,9 +114,9 @@ exports.updateApplication = async (req, res, next) => {
         linkToCV,
         linkToLetter,
         notes,
-        company: { connect: { id: company.id } },
+        company: { connect: { id: companyId } },
         user: { connect: { id: req.userId } },
-        status: { connect: { id: statusId } },
+        Status: { connect: { id: statusId } },
       },
     });
 

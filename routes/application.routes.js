@@ -6,9 +6,11 @@ const {
   deleteApplication,
   updateApplication,
   addApplication,
+  getApplication,
 } = require("../controller/application.controller");
 
 router.get("/", getAllApplications);
+router.get("/:applicationId", getApplication);
 router.post("/", addApplication);
 router.put("/:applicationId", updateApplication);
 router.delete("/:applicationId", deleteApplication);

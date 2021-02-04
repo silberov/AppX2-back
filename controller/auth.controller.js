@@ -40,6 +40,7 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
@@ -50,7 +51,7 @@ exports.login = async (req, res, next) => {
       throw createError(401, "Wrong Password");
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "6h",
     });
     res
       .status(200)

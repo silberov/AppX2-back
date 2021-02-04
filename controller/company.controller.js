@@ -23,7 +23,9 @@ exports.getAllCompanies = async (req, res, next) => {
 exports.getCompanyById = async (req, res, next) => {
   try {
     const companyId = Number(req.params.companyId);
-    const company = await db.company.findMany();
+    const company = await db.company.findUnique({
+      where: { id: companyId },
+    });
     res.status(200).json(company);
   } catch (err) {
     next(err);
