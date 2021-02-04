@@ -52,7 +52,8 @@ exports.getApplication = async (req, res, next) => {
 };
 
 exports.addApplication = async (req, res, next) => {
-  console.log(req.userId);
+  // console.log(req.userId);
+  // console.log(req.body);
   try {
     const {
       position,
@@ -76,7 +77,7 @@ exports.addApplication = async (req, res, next) => {
         notes,
         company: { connect: { id: companyId } },
         user: { connect: { id: req.userId } },
-        status: { connect: { id: statusId } },
+        Status: { connect: { id: statusId } },
       },
     });
 
@@ -98,7 +99,6 @@ exports.updateApplication = async (req, res, next) => {
       notes,
       statusId,
       companyId,
-      companyName,
     } = req.body;
     // const company = await db.company.findUnique({
     //   where: { name: companyName },
