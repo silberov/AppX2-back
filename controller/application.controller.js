@@ -89,6 +89,7 @@ exports.addApplication = async (req, res, next) => {
 
 exports.updateApplication = async (req, res, next) => {
   console.log(req.userId);
+  console.log(req.body);
   const applicationId = Number(req.params.applicationId);
   try {
     const {
@@ -98,7 +99,6 @@ exports.updateApplication = async (req, res, next) => {
       linkToLetter,
       notes,
       statusId,
-      companyId,
     } = req.body;
     // const company = await db.company.findUnique({
     //   where: { name: companyName },
@@ -114,7 +114,7 @@ exports.updateApplication = async (req, res, next) => {
         linkToCV,
         linkToLetter,
         notes,
-        company: { connect: { id: companyId } },
+        // company: { connect: { id: companyId } },
         user: { connect: { id: req.userId } },
         Status: { connect: { id: statusId } },
       },
